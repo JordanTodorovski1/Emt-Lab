@@ -6,11 +6,18 @@ import mk.ukim.finki.wp.lab.model.dto.CreateAccommodationDto;
 import mk.ukim.finki.wp.lab.model.dto.CreateReservationDto;
 import mk.ukim.finki.wp.lab.model.dto.DisplayAccommodationDto;
 import mk.ukim.finki.wp.lab.model.dto.DisplayReservationDto;
+import mk.ukim.finki.wp.lab.model.enums.Category;
+import mk.ukim.finki.wp.lab.model.projections.AccommodationComplexProjection;
+import mk.ukim.finki.wp.lab.model.views.AccommodationPreviewView;
+import mk.ukim.finki.wp.lab.model.views.AccommodationView;
 import mk.ukim.finki.wp.lab.service.application.AccommodationApplicationService;
 import mk.ukim.finki.wp.lab.service.application.ReservationApplicationService;
 import mk.ukim.finki.wp.lab.service.domain.AccommodationService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,5 +54,39 @@ public class AccommodationController {
     public ResponseEntity<DisplayReservationDto> createReservation(@RequestBody CreateReservationDto createReservationDto) {
         DisplayReservationDto dto = reservationApplicationService.createReservation(createReservationDto);
         return ResponseEntity.ok(dto);
+    }
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<DisplayAccommodationDto>> getBooksWithPagination(
+            @RequestParam(required = false) Category category,
+            @RequestParam(required = false) Long hostId,
+            @RequestParam(required = false) Long countryId,
+            @RequestParam(required = false) Integer numRooms,
+            @RequestParam(required = false) Boolean available,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy
+    ) {
+        return ResponseEntity.ok(accommodationApplicationService.getAllWithPagination(category, hostId, countryId, numRooms, available, page, size, sortBy));
+    }
+    @GetMapping("/projection")
+    public ResponseEntity<List<AccommodationComplexProjection>> AccommodationComplexProjection(){
+        return ResponseEntity.ok(accommodationApplicationService.getAccommodationComplexProjection());
+    }
+
+    @GetMapping("/entity-graph/{id}")
+    public ResponseEntity<DisplayAccommodationDto> findByIdWithEntityGraph(@PathVariable Long id){
+        return ResponseEntity.ok(accommodationApplicationService.findByIdWithEntityGraph(id));
+    }
+    @GetMapping("/view")
+    public ResponseEntity<List<AccommodationView>> findAllWithView(){
+        return ResponseEntity.ok(accommodationApplicationService.findAllWithView());
+    }
+    @GetMapping("/materialized-view")
+    public ResponseEntity<List<AccommodationPreviewView>> findAllWithMaterializedView(){
+        return ResponseEntity.ok(accommodationApplicationService.findAllWithMaterializedView());
+    }
+    @PostMapping("/rent-accommodation/{id}")
+    public ResponseEntity<DisplayAccommodationDto> rentAccommodation(@PathVariable Long id){
+        return  ResponseEntity.ok(accommodationApplicationService.rentAccommodation(id));
     }
 }

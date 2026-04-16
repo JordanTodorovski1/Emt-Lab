@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp.lab.model.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class Host extends BaseAuditableEntity{
     private String surname;
 
     @ManyToOne
+    @JoinColumn(name = "country_id")
     private Country country;
 
 }

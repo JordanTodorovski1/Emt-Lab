@@ -12,6 +12,21 @@ import mk.ukim.finki.wp.lab.model.enums.State;
 @Table(name = "accommodations")
 @Data
 @NoArgsConstructor
+@NamedEntityGraph(
+        name = "accommodation-entity-graph",
+        attributeNodes = {
+                @NamedAttributeNode(value = "host", subgraph = "host-item-subgraph"),
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "host-item-subgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("country")
+                        }
+                )
+        }
+)
+
 public class Accommodation extends BaseAuditableEntity{
 
     private String name;
@@ -23,6 +38,7 @@ public class Accommodation extends BaseAuditableEntity{
     private State state;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "host_id")
     private Host host;
 
     private Integer numRooms;

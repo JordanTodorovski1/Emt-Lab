@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.lab.controller.handler;
 
+import mk.ukim.finki.wp.lab.model.exception.AccommodationNotAvailableException;
 import mk.ukim.finki.wp.lab.model.exception.AccommodationNotFoundException;
 import mk.ukim.finki.wp.lab.model.exception.HostNotFoundException;
 import mk.ukim.finki.wp.lab.model.exception.InvalidOperationException;
@@ -15,6 +16,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleAccommodationNotFound(AccommodationNotFoundException exception) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(ApiError.of(HttpStatus.NOT_FOUND, exception.getMessage()));
+    }
+
+    @ExceptionHandler(AccommodationNotAvailableException.class)
+    public ResponseEntity<ApiError> handleAccommodationNotAvailable(AccommodationNotAvailableException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(ApiError.of(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
 
