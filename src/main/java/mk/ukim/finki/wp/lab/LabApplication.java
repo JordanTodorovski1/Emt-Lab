@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableAsync
 public class LabApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(LabApplication.class, args);
     }

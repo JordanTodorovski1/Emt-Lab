@@ -20,4 +20,6 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, Lo
 
     @EntityGraph(value = "accommodation-entity-graph", type = EntityGraph.EntityGraphType.FETCH)
     Optional<Accommodation> findWithHostById(Long id);
+
+    List<Accommodation> findTop10ByOrderByDateStartedWorkingDesc();
 }

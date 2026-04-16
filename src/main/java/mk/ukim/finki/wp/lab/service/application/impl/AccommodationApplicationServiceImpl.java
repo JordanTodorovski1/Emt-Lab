@@ -84,4 +84,11 @@ public class AccommodationApplicationServiceImpl implements AccommodationApplica
         return DisplayAccommodationDto.createAccommodationDto(accommodation);
     }
 
+    @Override
+    public List<DisplayAccommodationDto> findTop10NewestAccommodations() {
+        return accommodationService.findTop10NewestAccommodations()
+                .stream()
+                .map(DisplayAccommodationDto::createAccommodationDto)
+                .toList();
+    }
 }

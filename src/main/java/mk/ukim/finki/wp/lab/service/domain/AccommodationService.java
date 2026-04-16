@@ -7,6 +7,8 @@ import mk.ukim.finki.wp.lab.model.views.AccommodationPreviewView;
 import mk.ukim.finki.wp.lab.model.views.AccommodationView;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AccommodationService {
@@ -21,4 +23,7 @@ public interface AccommodationService {
     List<AccommodationView> findAllWithView();
     List<AccommodationPreviewView> findAllWithMaterializedView();
     Accommodation rentAccommodation(Long id);
+    List<Accommodation> findTop10NewestAccommodations();
+    Accommodation create(String name, Category category, Long hostId, Integer numRooms, LocalDate dateStartedWorking);
+    Accommodation update(Long id, String name, Category category, Long hostId, Integer numRooms, LocalDate dateStartedWorking);
 }

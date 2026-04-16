@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import mk.ukim.finki.wp.lab.model.enums.Category;
 import mk.ukim.finki.wp.lab.model.enums.State;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "accommodations")
@@ -43,11 +46,14 @@ public class Accommodation extends BaseAuditableEntity{
 
     private Integer numRooms;
 
-    public Accommodation(String name, Category category, State state, Host host, Integer numRooms) {
+    private LocalDate dateStartedWorking;
+
+    public Accommodation(String name, Category category, State state, Host host, Integer numRooms, LocalDate dateStartedWorking) {
         this.name = name;
         this.category = category;
         this.state = state;
         this.host = host;
         this.numRooms = numRooms;
+        this.dateStartedWorking = dateStartedWorking;
     }
 }

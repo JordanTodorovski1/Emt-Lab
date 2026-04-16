@@ -4,12 +4,16 @@ import mk.ukim.finki.wp.lab.model.domain.Accommodation;
 import mk.ukim.finki.wp.lab.model.enums.Category;
 import mk.ukim.finki.wp.lab.model.enums.State;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public record DisplayAccommodationDto(
         String name,
         Category category,
         State state,
         DisplayHostDto host,
-        Integer numRooms
+        Integer numRooms,
+        LocalDate dateStartedWorking
 ) {
     public static DisplayAccommodationDto createAccommodationDto(Accommodation accommodation ){
 
@@ -29,7 +33,8 @@ public record DisplayAccommodationDto(
                 accommodation.getCategory(),
                 accommodation.getState(),
                 host,
-                accommodation.getNumRooms()
+                accommodation.getNumRooms(),
+                accommodation.getDateStartedWorking()
 
         );
     }

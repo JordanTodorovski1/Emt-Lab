@@ -89,4 +89,13 @@ public class AccommodationController {
     public ResponseEntity<DisplayAccommodationDto> rentAccommodation(@PathVariable Long id){
         return  ResponseEntity.ok(accommodationApplicationService.rentAccommodation(id));
     }
+    @GetMapping("/newest10")
+    public ResponseEntity<?> findTop10NewestAccommodations() {
+        try {
+            return ResponseEntity.ok(accommodationApplicationService.findTop10NewestAccommodations());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }

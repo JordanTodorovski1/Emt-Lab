@@ -22,4 +22,5 @@ public interface AccommodationApplicationService {
     List<AccommodationView> findAllWithView();
     List<AccommodationPreviewView> findAllWithMaterializedView();
     DisplayAccommodationDto rentAccommodation(Long id);
+    List<DisplayAccommodationDto> findTop10NewestAccommodations();
 }

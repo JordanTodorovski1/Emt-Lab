@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.wp.lab.events.AccommodationNotAvailableEvent;
 import mk.ukim.finki.wp.lab.events.ActivityEvent;
 import mk.ukim.finki.wp.lab.model.domain.Accommodation;
+import mk.ukim.finki.wp.lab.model.domain.Host;
 import mk.ukim.finki.wp.lab.model.enums.ActivityType;
 import mk.ukim.finki.wp.lab.model.enums.Category;
 import mk.ukim.finki.wp.lab.model.enums.State;
@@ -18,6 +19,7 @@ import mk.ukim.finki.wp.lab.model.views.AccommodationView;
 import mk.ukim.finki.wp.lab.repository.AccommodationPreviewViewRepository;
 import mk.ukim.finki.wp.lab.repository.AccommodationRepository;
 import mk.ukim.finki.wp.lab.repository.AccommodationViewRepository;
+import mk.ukim.finki.wp.lab.repository.HostRepository;
 import mk.ukim.finki.wp.lab.service.domain.AccommodationService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +42,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final AccommodationViewRepository accommodationViewRepository;
     private final AccommodationPreviewViewRepository accommodationPreviewViewRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final HostRepository hostRepository;
 
     @Override
     public Accommodation findById(Long id) {
@@ -160,5 +164,41 @@ public class AccommodationServiceImpl implements AccommodationService {
         }else{
             throw new AccommodationNotAvailableException("Accommodation is not available.");
         }
+    }
+
+    @Override
+    public List<Accommodation> findTop10NewestAccommodations() {
+        return accommodationRepository.findTop10ByOrderByDateStartedWorkingDesc();
+    }
+
+    @Override
+    public Accommodation create(String name, Category category, Long hostId, Integer numRooms, LocalDate dateStartedWorking) {
+        Host host = hostRepository.findById(hostId)
+                .orElseThrow(() -> new RuntimeException("Host not found"));
+
+        Accommodation accommodation = new Accommodation();
+
+        accommodation.setName(name);
+        accommodation.setCategory(category);
+        accommodation.setNumRooms(numRooms);
+        accommodation.setHost(host);
+        accommodation.setDateStartedWorking(dateStartedWorking);
+        return accommodationRepository.save(accommodation);
+    }
+    @Override
+    public Accommodation update(Long id, String name, Category category, Long hostId, Integer numRooms, LocalDate dateStartedWorking) {
+        Accommodation accommodation = accommodationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Accommodation not found"));
+
+        Host host = hostRepository.findById(hostId)
+                .orElseThrow(() -> new RuntimeException("Host not found"));
+
+        accommodation.setName(name);
+        accommodation.setCategory(category);
+        accommodation.setNumRooms(numRooms);
+        accommodation.setHost(host);
+        accommodation.setDateStartedWorking(dateStartedWorking);
+
+        return accommodationRepository.save(accommodation);
     }
 }
